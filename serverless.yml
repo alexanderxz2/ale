@@ -1,0 +1,139 @@
+org: alexanderxz2
+app: retosoft
+service: retosoft
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "dynamodb:PutItem"
+        - "dynamodb:GetItem"
+        - "dynamodb:UpdateItem"
+        - "dynamodb:DeleteItem"
+      Resource:
+        - "arn:aws:dynamodb:us-east-1:975049890186:table/PeopleTable"
+        - "arn:aws:dynamodb:us-east-1:975049890186:table/PlanetsTable"  
+
+functions:
+  api:
+    handler: index.handler
+    events:
+      - httpApi:
+          path: /personas/{id}  # Obtener un personaje específico por ID
+          method: get
+  create:
+    handler: index.create
+    events:
+      - httpApi:
+          path: /PeopleTable  # Crear un nuevo personaje
+          method: post
+  update:
+    handler: index.update
+    events:
+      - httpApi:
+          path: /PeopleTable/{id}  # Actualizar un personaje específico por ID
+          method: put
+  delete:
+    handler: index.delete
+    events:
+      - httpApi:
+          path: /PeopleTable/{id}  # Eliminar un personaje específico por ID
+          method: delete
+          
+  getPlanet:
+    handler: index.getPlanet
+    events:
+      - httpApi:
+          path: /planets/{id}  # Obtener información de un planeta específico por ID
+          method: get
+
+
+resources:
+  Resources:
+    PeopleTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: People
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
+    PlanetsTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: Planets
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
+    StarshipsTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: Starships
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
+    VehiclesTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: Vehicles
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
+    SpeciesTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: Species
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
+    FilmsTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: Films
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    # Repite para las demás entidades como Vehicles, Species, Films
